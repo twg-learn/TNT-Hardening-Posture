@@ -1,0 +1,119 @@
+# ── TNT Security Posture — Configuration File ─────────────────────────────────
+#
+# Usage:
+#   sudo bash posture.sh --config /path/to/this.conf
+#   sudo bash posture.sh -c /path/to/this.conf
+#
+# All settings are optional. Omitted values fall back to the hardened defaults
+# (same as the interactive menu's pre-selected options).
+#
+# This file is sourced as bash, so comments (#) and variable expansion work.
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+# ── Display ───────────────────────────────────────────────────────────────────
+
+# Theme: dark | light | vampire | powershell | manila | compat
+# True Color themes (dark, light, vampire, powershell, manila) require a
+# 24-bit terminal.  "compat" uses standard ANSI-16 colours and works everywhere.
+# If a True Color theme is requested but the terminal can't supply it, compat
+# is used automatically.
+TNT_THEME=dark
+
+# True Color override: yes | no
+# Normally auto-detected from terminal signals (COLORTERM, VTE_VERSION, etc.).
+# Override here if detection is wrong — e.g. in CI, under sudo, or when piping.
+# TNT_TRUECOLOR=yes
+
+
+# ── Deployment Context ────────────────────────────────────────────────────────
+# These drive context-aware thresholds throughout the report (e.g. stricter SSH
+# rules for Internet-Facing hosts, tighter sudo counts for High adversary).
+
+# System Role: Desktop | Server | Hypervisor | Mixed
+TNT_ROLE=Server
+
+# Network Exposure: LAN-Only | VPN | Internet-Facing
+TNT_NETWORK=LAN-Only
+
+# Adversary Model: Low | Moderate | High
+TNT_ADVERSARY=High
+
+# Physical Access: Trusted | Semi-Trusted | Untrusted
+TNT_PHYSICAL=Trusted
+
+
+# ── Report Options ────────────────────────────────────────────────────────────
+
+# Print inline explanations beneath each check result: yes | no
+TNT_EXPLAIN=no
+
+# Banner at top and bottom of the report: yes | no
+# Set to "no" for concise machine-readable output (CI, piped reports).
+TNT_BANNER=yes
+
+# Export a copy of the report to disk: yes | no
+TNT_EXPORT=no
+
+# Export format: text | html | pdf
+#   text — plain text with ANSI codes stripped (.txt)
+#   html — styled HTML document matching terminal appearance (.html)  requires python3
+#   pdf  — PDF via HTML conversion (.pdf)                            requires python3 +
+#          wkhtmltopdf, chromium, google-chrome, or weasyprint
+TNT_EXPORT_TYPE=text
+
+# Directory to write the exported file into (created if it does not exist).
+# Defaults to the home directory.
+#
+# This file is sourced as bash, so variable and command expansion work here.
+# Use $HOME for the invoking user's home directory (most cases):
+#   TNT_EXPORT_PATH=$(_tnt_real_home)/reports/
+#
+# If you run posture.sh via sudo and want the real user's home (not /root),
+# use the built-in helper _tnt_real_home() instead:
+#   TNT_EXPORT_PATH=$(_tnt_real_home)/Downloads/reports/
+TNT_EXPORT_PATH=$(_tnt_real_home)/reports/
+
+# Base filename without extension — the correct extension is added automatically.
+# Shell expansion works here. Omit to auto-generate from the current timestamp.
+# TNT_EXPORT_NAME="posture_$(hostname -s)_$(date +%Y%m%d_%H%M)"
+
+
+# ── Module Selection ──────────────────────────────────────────────────────────
+# Controls which audit modules are executed.
+#
+# "all" (or "full") — run every module; equivalent to Full Report in the UI.
+#
+# Or supply a space- or comma-separated list of module names to run only those.
+# Names are case-insensitive; hyphens and underscores are interchangeable.
+#
+# Available modules:
+#   identity        — System identity (hostname, OS, uptime)
+#   hardware        — Hardware & virtualisation detection
+#   network         — Network interfaces & exposed services
+#   ssh             — SSH daemon hardening
+#   security        — Logging, auditd, fail2ban, AppArmor/SELinux
+#   attack_surface  — Attack surface density (open ports, running daemons)
+#   hw_security     — Hardware security (Secure Boot, TPM, Bluetooth)
+#   users           — Users, sudo rights & privilege escalation paths
+#   filesystem      — Filesystem mounts, permissions & encryption
+#   packages        — Package currency & pending security updates
+#   auth_events     — Recent authentication events & failures
+#   scheduled       — Cron jobs & systemd timers
+#   docker          — Docker daemon & container security
+#   webserver       — Web server configuration (nginx, Apache)
+#   cpu_vuln        — CPU vulnerability mitigations (Spectre, Meltdown …)
+#   kernel          — Kernel hardening (sysctl parameters)
+#   ntp             — Time synchronisation & NTP configuration
+#   suid            — SUID / SGID binary audit
+#   fim             — File Integrity Monitoring (AIDE, Tripwire)
+#   vpn             — VPN client detection & configuration
+#   suspicious      — Suspicious process indicators
+#   world_writable  — World-writable files & sticky-bit directories
+
+TNT_MODULES="network,ssh,attack_surface,users,kernel"
+
+# Examples:
+#   TNT_MODULES="ssh kernel users"           # three modules only
+#   TNT_MODULES="ssh,kernel,users"           # commas also work
+#   TNT_MODULES="network,ssh,attack_surface,users,kernel"  # quick server check

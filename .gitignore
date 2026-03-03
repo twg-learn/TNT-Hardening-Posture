@@ -1,0 +1,7 @@
+# Claude IDE settings
+.claude/
+
+# Temporary / scratch files
+TNT/temp-project-files/
+TNT/test-outputs/
+TNT/todo.txt
