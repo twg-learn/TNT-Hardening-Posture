@@ -41,7 +41,7 @@ repo, run the script with `sudo`, and you're done.
 ```bash
 git clone https://github.com/twg-learn/Hardening-Posture.git
 cd Hardening-Posture
-sudo bash TNT/posture.sh
+sudo bash posture.sh
 ```
 
 The script opens an interactive configuration menu. Answer the prompts, select your
@@ -54,7 +54,7 @@ modules, and the report runs immediately.
 ### Interactive mode
 
 ```bash
-sudo bash TNT/posture.sh
+sudo bash posture.sh
 ```
 
 You'll be walked through:
@@ -69,7 +69,7 @@ You'll be walked through:
 Pass a config file with `--config` (or `-c`) to skip all prompts:
 
 ```bash
-sudo bash TNT/posture.sh --config TNT/config-files/posture.conf.example
+sudo bash posture.sh --config config-files/posture.conf.example
 ```
 
 This is the recommended approach for repeated audits, scheduled tasks, or piping the
@@ -84,7 +84,7 @@ back to a sensible hardened default. Comments are supported with `#`.
 
 ### Full example
 
-See [`TNT/config-files/posture.conf.example`](TNT/config-files/posture.conf.example)
+See [`config-files/posture.conf.example`](config-files/posture.conf.example)
 for a fully documented reference config.
 
 ### Minimal example
@@ -205,17 +205,17 @@ command line to force compat mode for testing.
 
 **Full report, dark theme, no export:**
 ```bash
-sudo bash TNT/posture.sh
+sudo bash posture.sh
 ```
 
 **Quick server check from a config file:**
 ```bash
-sudo bash TNT/posture.sh --config TNT/config-files/posture.conf.example
+sudo bash posture.sh --config config-files/posture.conf.example
 ```
 
 **Three specific modules, compat mode (for a basic terminal or SSH session):**
 ```bash
-sudo bash TNT/posture.sh -tc --config my-server.conf
+sudo bash posture.sh -tc --config my-server.conf
 # my-server.conf contains: TNT_MODULES="ssh,kernel,users"
 ```
 
@@ -228,13 +228,13 @@ TNT_EXPORT_PATH=/var/reports/
 TNT_EXPORT_NAME="posture_$(hostname -s)_$(date +%Y%m%d)"
 TNT_MODULES="all"
 
-sudo bash TNT/posture.sh --config audit.conf
+sudo bash posture.sh --config audit.conf
 ```
 
 **Pipe plain-text output to an LLM or log aggregator:**
 ```bash
 # Set TNT_BANNER=no in your config to suppress decorative headers
-sudo bash TNT/posture.sh --config headless.conf | tee /var/log/posture.log
+sudo bash posture.sh --config headless.conf | tee /var/log/posture.log
 ```
 
 ---
@@ -246,7 +246,7 @@ sudo bash TNT/posture.sh --config headless.conf | tee /var/log/posture.log
 - This tool is designed for learning and provides general security insights — it is not
   a professional security audit and does not replace one.
 - The modular design means adding or modifying checks is straightforward: each module
-  is a self-contained bash file in `TNT/modules/`.
+  is a self-contained bash file in `modules/`.
 - Tested on Debian / Ubuntu based distributions. Most checks are portable to any
   systemd-based Linux distribution.
 

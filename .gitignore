@@ -2,6 +2,6 @@
 .claude/
 
 # Temporary / scratch files
-TNT/temp-project-files/
-TNT/test-outputs/
-TNT/todo.txt
+temp-project-files/
+test-outputs/
+todo.txt
